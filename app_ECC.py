@@ -341,9 +341,9 @@ with tab2:
     
     st.markdown("---")
     
-    # Reference (بدون توضیحات - فقط عنوان)
+    # Reference
     st.markdown("### 📚 Reference")
-    st.markdown("*(To be added after publication)*")
+    st.markdown("**")
     
     st.markdown("---")
     
