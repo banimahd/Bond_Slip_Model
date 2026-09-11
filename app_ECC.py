@@ -67,17 +67,6 @@ with tab1:
     
     run_button = st.sidebar.button("▶ Run", type="primary", use_container_width=True)
     
-    # --- Made by ---
-    st.sidebar.markdown(
-        "<div style='text-align: center; margin-top: 25px; font-size: 13px; color: gray;'>"
-        "Made by "
-        "<a href='mailto:banimahd@gmail.com' "
-        "style='color: #1f77b4; text-decoration: none; font-weight: bold;'>"
-        "Seyed Amir Banimahd</a>"
-        "</div>",
-        unsafe_allow_html=True
-    )
-    
     # ============================================================
     # MODEL COEFFICIENTS
     # ============================================================
