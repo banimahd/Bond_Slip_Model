@@ -341,12 +341,4 @@ with tab2:
     
     st.markdown("---")
     
-    st.markdown("### 📚 Reference")
-    st.markdown(
-        "Based on the experimental investigation and empirical model developed at "
-        "Ardakan University, Department of Civil Engineering."
-    )
-    
-    st.markdown("---")
-    
     st.caption("© 2026 Seyed Amir Banimahd. All rights reserved.")
