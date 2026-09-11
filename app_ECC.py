@@ -341,4 +341,10 @@ with tab2:
     
     st.markdown("---")
     
+    # Reference (بدون توضیحات - فقط عنوان)
+    st.markdown("### 📚 Reference")
+    st.markdown("*(To be added after publication)*")
+    
+    st.markdown("---")
+    
     st.caption("© 2026 Seyed Amir Banimahd. All rights reserved.")
