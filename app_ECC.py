@@ -12,7 +12,6 @@ st.set_page_config(
 )
 
 st.title("Normalized Bond Stress-Slip Curves")
-st.markdown("**Made by Amir Banimahd**")
 
 # ============================================================
 # SIDEBAR - INPUTS
@@ -41,21 +40,33 @@ Material = st.sidebar.selectbox(
 
 run_button = st.sidebar.button("▶ Run", type="primary", use_container_width=True)
 
+# --- Made by (زیر دکمه Run) با هایپرلینک به ایمیل ---
+st.sidebar.markdown(
+    "<div style='text-align: center; margin-top: 25px; font-size: 13px; color: gray;'>"
+    "Made by "
+    "<a href='mailto:banimahd@gmail.com' "
+    "style='color: #1f77b4; text-decoration: none; font-weight: bold;'>"
+    "Amir Banimahd</a>"
+    "</div>",
+    unsafe_allow_html=True
+)
+
+
 # ============================================================
 # MODEL COEFFICIENTS
 # ============================================================
 T1 = np.array([
-    [-0.00001, 0.00609, 0.00169, 0.01524, -0.00639, -0.00582, 0.00234, -0.01145],
-    [0.00706, -0.25656, -0.05913, -0.68619, 0.27556, 0.25794, -0.09031, 0.51169],
-    [-0.13658, 3.25625, 0.71650, 9.84392, -3.58808, -3.68508, 1.38875, -7.31508],
-    [2.02000, -9.80000, -1.72000, -42.78000, 15.42000, 19.13000, -5.91000, 35.74000],
-    [-0.02710, 0.00609, -0.00405, 0.01524, -0.01482, -0.00582, -0.00650, -0.01145],
-    [1.27913, -0.25656, 0.18356, -0.68619, 0.64869, 0.25794, 0.32075, 0.51169],
-    [-19.48483, 3.25625, -2.53842, 9.84392, -8.83558, -3.68508, -4.67050, -7.31508],
+    [-0.00001,  0.00609,  0.00169,  0.01524, -0.00639, -0.00582,  0.00234, -0.01145],
+    [ 0.00706, -0.25656, -0.05913, -0.68619,  0.27556,  0.25794, -0.09031,  0.51169],
+    [-0.13658,  3.25625,  0.71650,  9.84392, -3.58808, -3.68508,  1.38875, -7.31508],
+    [ 2.02000, -9.80000, -1.72000, -42.78000, 15.42000, 19.13000, -5.91000, 35.74000],
+    [-0.02710,  0.00609, -0.00405,  0.01524, -0.01482, -0.00582, -0.00650, -0.01145],
+    [ 1.27913, -0.25656,  0.18356, -0.68619,  0.64869,  0.25794,  0.32075,  0.51169],
+    [-19.48483, 3.25625, -2.53842,  9.84392, -8.83558, -3.68508, -4.67050, -7.31508],
     [98.66000, -9.80000, 13.46000, -42.78000, 39.62000, 19.13000, 23.44000, 35.74000],
-    [0.00824, -0.00545, -0.02388, 0.00749, -0.00047, 0.00034, 0.01832, -0.00253],
-    [-0.27769, 0.26119, 1.09225, -0.34169, 0.08281, -0.01681, -0.82169, 0.10994],
-    [2.82492, -4.10808, -15.53900, 5.00092, -1.55125, 0.30975, 12.62258, -1.49225],
+    [ 0.00824, -0.00545, -0.02388,  0.00749, -0.00047,  0.00034,  0.01832, -0.00253],
+    [-0.27769,  0.26119,  1.09225, -0.34169,  0.08281, -0.01681, -0.82169,  0.10994],
+    [ 2.82492, -4.10808, -15.53900, 5.00092, -1.55125,  0.30975, 12.62258, -1.49225],
     [-1.15000, 21.70000, 77.04000, -22.86000, 13.60000, -1.56000, -55.46000, 6.94000]
 ])
 
@@ -65,9 +76,9 @@ T1 = np.array([
 # Rows:    0=10mm, 1=12mm, 2=16mm, 3=20mm
 # Columns: 0=CU, 1=CC, 2=EU, 3=EC
 X4 = np.array([
-    [15.1753, 8.6464, 13.9963, 8.6464],
-    [15.6701, 15.6701, 8.0067, 14.1081],
-    [14.6768, 16.4155, 9.8250, 11.6549],
+    [15.1753, 8.6464,  13.9963, 8.6464],
+    [15.6701, 15.6701, 8.0067,  14.1081],
+    [14.6768, 16.4155, 9.8250,  11.6549],
     [13.2137, 13.2273, 12.4297, 15.0762]
 ])
 
@@ -94,24 +105,24 @@ def compute_model(db, Confinment, Material):
         col_idx = 3
     else:
         raise ValueError("Invalid input")
-
-    vec = np.array([db ** 3, db ** 2, db, 1])
-
+    
+    vec = np.array([db**3, db**2, db, 1])
+    
     x1 = vec @ T1[0:4, col_x]
     y1 = vec @ T1[0:4, col_y]
     x2 = vec @ T1[4:8, col_x]
     y2 = vec @ T1[4:8, col_y]
     x3 = vec @ T1[8:12, col_x]
     y3 = vec @ T1[8:12, col_y]
-
+    
     diameters = [10, 12, 16, 20]
     row_idx = diameters.index(db)
     x4 = X4[row_idx, col_idx]
     y4 = y3
-
+    
     x_model = np.array([0, x1, x2, x3, x4])
     y_model = np.array([0, y1, y2, y3, y4])
-
+    
     return {
         'x1': x1, 'y1': y1,
         'x2': x2, 'y2': y2,
@@ -140,77 +151,77 @@ def plot_data(results):
     y_model = results['y_model']
     label = results['label']
     db = results['db']
-
+    
     # --- Smart offset to avoid overlap ---
-    dist_12 = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-    dist_34 = np.sqrt((x4 - x3) ** 2 + (y4 - y3) ** 2)
-
+    dist_12 = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+    dist_34 = np.sqrt((x4 - x3)**2 + (y4 - y3)**2)
+    
     threshold_x = 0.10 * np.max(x_model)
     threshold_y = 0.10 * np.max(y_model)
-
+    
     if dist_12 < threshold_x:
         offset_x1, offset_x2 = -0.5, +0.5
     else:
         offset_x1, offset_x2 = 0, 0
-
+    
     if dist_34 < threshold_x:
         offset_x3, offset_x4 = -0.5, +0.5
     else:
         offset_x3, offset_x4 = 0, 0
-
+    
     offset_y3 = -0.10 * np.max(y_model) if (abs(y1 - y3) < threshold_y and abs(x1 - x3) < threshold_x) else 0
-
+    
     # --- Create figure ---
     fig, ax = plt.subplots(figsize=(12, 7))
-
+    
     # Model curve (BLUE SOLID LINE)
     ax.plot(x_model, y_model, 'b-', linewidth=3, label='Model Prediction')
-
+    
     # Characteristic points (RED FILLED CIRCLES)
     ax.plot([x1, x2, x3, x4], [y1, y2, y3, y4], 'ro',
             markersize=14, markerfacecolor='r', markeredgewidth=2,
             label='Characteristic Points')
-
+    
     # --- Add coordinates (VERTICAL FORMAT) ---
     y_offset = 0.05 * np.max(y_model)
-
-    ax.text(x1 + offset_x1, y1 + y_offset,
+    
+    ax.text(x1 + offset_x1, y1 + y_offset, 
             f'P1\nS={x1:.3f}\nτ={y1:.3f}',
             fontsize=13, color='k', fontweight='bold',
             va='bottom', ha='center')
-
-    ax.text(x2 + offset_x2, y2 + y_offset,
+    
+    ax.text(x2 + offset_x2, y2 + y_offset, 
             f'P2\nS={x2:.3f}\nτ={y2:.3f}',
             fontsize=13, color='k', fontweight='bold',
             va='bottom', ha='center')
-
-    ax.text(x3 + offset_x3, y3 + y_offset + offset_y3,
+    
+    ax.text(x3 + offset_x3, y3 + y_offset + offset_y3, 
             f'P3\nS={x3:.3f}\nτ={y3:.3f}',
             fontsize=13, color='k', fontweight='bold',
             va='bottom', ha='center')
-
-    ax.text(x4 + offset_x4, y4 + y_offset,
+    
+    ax.text(x4 + offset_x4, y4 + y_offset, 
             f'P4\nS={x4:.3f}\nτ={y4:.3f}',
             fontsize=13, color='k', fontweight='bold',
             va='bottom', ha='center')
-
+    
     # --- Axis labels and title ---
     ax.set_xlabel('Slip (mm)', fontsize=18, color='k', fontweight='bold')
     ax.set_ylabel('Normalized Bond Stress', fontsize=18, color='k', fontweight='bold')
     ax.set_title(f'Predicted Bond-Slip for $d_b$ = {db} mm - {label}',
                  fontsize=18, color='k', fontweight='bold')
-
+    
     ax.grid(True, linewidth=0.8)
     ax.tick_params(labelsize=15, colors='k')
     for spine in ax.spines.values():
         spine.set_linewidth(1.5)
-
+    
     ax.set_ylim(0, 1.55 * np.max(y_model))
     ax.set_xlim(0, np.max(x_model) * 1.25)
-
+    
     # --- Legend ---
     ax.legend(fontsize=13, loc='upper right')
-
+    
     plt.tight_layout()
     return fig
 
@@ -220,51 +231,51 @@ def plot_data(results):
 # ============================================================
 if run_button:
     results = compute_model(db, Confinment, Material)
-
+    
     # --- Plot ---
     fig = plot_data(results)
     st.pyplot(fig)
-
+    
     # --- Outputs ---
     st.divider()
     st.markdown("### Outputs")
-
+    
     col1, col2, col3, col4 = st.columns(4)
-
+    
     with col1:
         st.markdown("**P1**")
         st.markdown(f"S<sub>1</sub> = `{results['x1']:.3f}` mm", unsafe_allow_html=True)
         st.markdown(f"τ<sub>1</sub> = `{results['y1']:.3f}`", unsafe_allow_html=True)
-
+    
     with col2:
         st.markdown("**P2**")
         st.markdown(f"S<sub>2</sub> = `{results['x2']:.3f}` mm", unsafe_allow_html=True)
         st.markdown(f"τ<sub>2</sub> = `{results['y2']:.3f}`", unsafe_allow_html=True)
-
+    
     with col3:
         st.markdown("**P3**")
         st.markdown(f"S<sub>3</sub> = `{results['x3']:.3f}` mm", unsafe_allow_html=True)
         st.markdown(f"τ<sub>3</sub> = `{results['y3']:.3f}`", unsafe_allow_html=True)
-
+    
     with col4:
         st.markdown("**P4**")
         st.markdown(f"S<sub>4</sub> = `{results['x4']:.3f}` mm", unsafe_allow_html=True)
         st.markdown(f"τ<sub>4</sub> = `{results['y4']:.3f}`", unsafe_allow_html=True)
-
+    
     st.divider()
     st.markdown("### Key Metrics")
-
+    
     m1, m2, m3, m4 = st.columns(4)
-
+    
     m1.markdown("**τ<sub>max</sub>**", unsafe_allow_html=True)
     m1.markdown(f"`{results['tau_max']:.3f}`")
-
+    
     m2.markdown("**τ<sub>res</sub>**", unsafe_allow_html=True)
     m2.markdown(f"`{results['tau_res']:.3f}`")
-
+    
     m3.markdown("**S<sub>peak</sub> (mm)**", unsafe_allow_html=True)
     m3.markdown(f"`{results['S_peak']:.3f}`")
-
+    
     m4.markdown("**S<sub>res</sub> (mm)**", unsafe_allow_html=True)
     m4.markdown(f"`{results['S_res']:.3f}`")
 
